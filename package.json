@@ -1,8 +1,8 @@
 {
   "name": "dsh-plugin-updates",
-  "version": "0.1.1",
+  "version": "0.2.2",
   "private": true,
-  "description": "DSH 插件更新检查：设置页显示已安装插件的当前版本与最新版本，启动时自动检查更新，支持一键更新和卸载",
+  "description": "DSH 鎻掍欢鏇存柊妫€鏌ワ細璁剧疆椤垫樉绀哄凡瀹夎鎻掍欢鐨勫綋鍓嶇増鏈笌鏈€鏂扮増鏈紝鍚姩鏃惰嚜鍔ㄦ鏌ユ洿鏂帮紝鏀寔涓€閿洿鏂板拰鍗歌浇",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
