@@ -149,6 +149,7 @@ dsh-plugin-updates/
 
 ## 更新日志
 
+- **0.2.3**：修复客户端插件（assets/plugins）更新时可能丢失 `dsh.plugin.json` / `cordis.patch.yml` 导致 UI 不加载/报错的问题——`applyNewSource` 现在支持保留文件清单，客户端插件更新会从旧备份补回缺失的 Desktop 装配文件；同时对齐 dsh-side-session 的 `dsh.plugin.json` 版本
 - **0.2.2**：**修复一个会破坏 DSH 启动的严重 bug**——启动自检里的「bundle 孤儿清理」错误地把应用内置的核心 bundle（dsh-base、dsh-web-app 等 10 项，它们不在 profile dependencies 里）从 `dsh.profile.bundles` 移除，导致核心服务无法激活、DSH Desktop 打不开。已彻底移除该清理逻辑，并加固 `reconcileBundles`（包信息读不到时跳过，不做增删判断）
 - **0.2.1**：更新大幅提速——依赖未变的插件更新**跳过 pnpm install**（node_modules 移入备份再移回，瞬时完成，省 10-60s/个）；「全部更新」对 registry 插件改为**一条 pnpm add 批量更新**（一个进程替代 N 个）；`git:` 源插件现在也显示 GitHub 最新版本和链接（更新仍手动）；无桌面桥接（终端模式）时重启提示给出明确的手动重启指引；.npmrc 的 registry 值兼容带引号
 - **0.2.0**：检查明显提速——GitHub 查询并发 2→6；registry 地址直接读 `.npmrc`（不再每次启动 spawn `npm config get registry`，约省 0.5-1s）；npm 版本查询改为 `curl --parallel` 批量（单进程并发 + 连接复用，旧 curl 自动回退单发）。「全部更新」纳入客户端插件（assets/plugins），按钮计数同步包含
