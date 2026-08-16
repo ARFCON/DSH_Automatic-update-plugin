@@ -82,9 +82,11 @@ function Upload-File {
 $files = @(
   'README.md',
   'LICENSE',
+  'PUBLISH.md',
   'package.json',
   'pnpm-lock.yaml',
   'install.ps1',
+  'install.sh',
   'publish.ps1',
   'lib/index.js',
   'lib/client.js',
