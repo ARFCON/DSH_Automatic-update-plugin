@@ -23,8 +23,9 @@ dsh-plugin-updates/
 ├─ pnpm-lock.yaml
 ├─ README.md
 ├─ LICENSE        # MIT 开源协议
+├─ PUBLISH.md     # 维护者发布说明
 ├─ install.ps1    # 一键安装脚本
-└─ publish.ps1    # 一键发布到 GitHub 的脚本（无需 git/gh）
+└─ publish.ps1    # 维护者发布脚本
 ```
 
 ## 环境要求
@@ -81,43 +82,6 @@ dsh-plugin-updates/
 
 5. 重启 DSH 服务。
 
-## 发布到 GitHub（开源）
-
-本仓库已包含 MIT LICENSE 与发布脚本。发布脚本**不需要 git/gh**，通过 GitHub REST API 上传。
-
-### 准备 Token（最小权限）
-
-1. 打开 GitHub → Settings → Developer settings → Fine-grained personal access tokens
-2. Generate new token，**只勾选** 你要发布的那个仓库，权限选：
-   - **Contents: Read and write**（上传文件必需）
-   - 不需要 `repo` 全权限
-3. 生成后复制 token
-
-### 运行发布（不要贴在命令行里）
-
-推荐使用环境变量（避免 token 进入 shell 历史）：
-
-```powershell
-$env:GH_TOKEN = "在这里粘贴你的 token"   # 仅当前 PowerShell 窗口生效
-.\publish.ps1                            # 公开仓库
-.\publish.ps1 -Private                   # 私有仓库
-.\publish.ps1 -RepoName my-dsh-plugin-updates
-```
-
-如果没设置环境变量，直接运行 `.\publish.ps1` 会**安全地提示你粘贴 token**（输入内容不显示、不进历史）：
-
-```powershell
-.\publish.ps1
-# 提示: GitHub token (will not be shown or saved to history)
-# 直接粘贴回车即可
-```
-
-脚本会：
-1. 自动获取令牌对应的 GitHub 用户名
-2. 不存在仓库时自动创建
-3. 用 REST API 上传 README、LICENSE、package.json、源码、安装/发布脚本
-4. 输出仓库地址
-
 ## 卸载
 
 ```powershell
@@ -144,3 +108,5 @@ MIT License。详见 LICENSE 文件。
 ## 版本
 
 - 当前版本：0.1.0（2026-08-16 增强版）
+
+> 维护者发布说明见 [PUBLISH.md](PUBLISH.md)。
