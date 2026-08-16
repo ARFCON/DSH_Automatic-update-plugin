@@ -45,8 +45,8 @@ dsh-plugin-updates/
    .\install.ps1 -Profile cc-tui # 也可以指定其他 profile
    ```
 
-3. 重启 DSH 服务（DSH Desktop 重启，或重启 dsh --profile web）
-4. 打开 设置 → 插件 → 插件更新
+3. **重启 DSH 服务**（DSH Desktop 重启，或重启 dsh --profile web）——必须重启，否则页面仍会显示旧缓存数据
+4. 打开 设置 → 插件 → 插件更新；如果看到的是旧数据，点一次右上角「重新检查」
 
 ## 手动安装
 
@@ -90,6 +90,16 @@ dsh plugin --profile web remove dsh-plugin-updates
 
 然后删除 ~/.dsh/profiles/web/cordis.patch.yml 里的 plugin-updates 块，重启 DSH 服务。
 
+
+## 开发者识别（可选）
+
+如果你是这个插件的作者，想让自己开发的插件在列表里显示“开发者”徽标，设置一个环境变量即可（只用于识别，不读取任何本机信息）：
+
+```powershell
+$env:DSH_PLUGIN_DEV_GITHUB = "你的 GitHub 用户名"
+```
+
+重启 DSH 后，GitHub 来源 owner 匹配该用户名的插件会显示“开发者”标签。
 ## 常见问题
 
 - **为什么很多插件显示“本地源码，手动更新”？**
@@ -107,6 +117,9 @@ MIT License。详见 LICENSE 文件。
 
 ## 版本
 
-- 当前版本：0.1.0（2026-08-16 增强版）
+- 当前版本：0.1.1（2026-08-16 增强版）
 
 > 维护者发布说明见 [PUBLISH.md](PUBLISH.md)。
+
+
+
