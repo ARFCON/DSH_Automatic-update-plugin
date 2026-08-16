@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-updates",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "DSH 插件更新检查：设置页显示已安装插件的当前版本与最新版本，启动时自动检查更新，支持一键更新和卸载",
   "type": "module",
