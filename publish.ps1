@@ -1,7 +1,7 @@
 param(
   [string]$Token = '',
-  [string]$RepoName = 'dsh-plugin-updates',
-  [string]$Description = 'DSH plugin updates checker: check/update plugins, GitHub mirror auto-update, DSH Desktop core package checks',
+  [string]$RepoName = 'DSH_Automatic-update-plugin',
+  [string]$Description = 'dsh-hub: DSH plugin hub — global memory, graph-memory / dsh-market mount & status, self update check',
   [switch]$Private
 )
 
@@ -26,11 +26,11 @@ if ([string]::IsNullOrEmpty($Token)) {
 
 $Headers = @{
   Authorization = "Bearer $Token"
-  'User-Agent'  = 'dsh-plugin-updates-publisher'
+  'User-Agent'  = 'dsh-hub-publisher'
   Accept        = 'application/vnd.github+json'
 }
 
-Write-Host '== dsh-plugin-updates GitHub publisher =='
+Write-Host '== dsh-hub GitHub publisher =='
 Write-Host 'Tip: for a fine-grained token, only grant Contents: Read and write on this repository.'
 
 # 1. Resolve the account owning the token
@@ -90,7 +90,8 @@ $files = @(
   'publish.ps1',
   'lib/index.js',
   'lib/client.js',
-  'lib/typert.js'
+  'lib/typert.js',
+  'lib/memory-core.js'
 )
 foreach ($file in $files) {
   $local = Join-Path $Source ($file -replace '/', '\')
@@ -103,4 +104,4 @@ foreach ($file in $files) {
 
 Write-Host ''
 Write-Host "Done: https://github.com/$owner/$RepoName"
-Write-Host 'Next: open the repo, add topics (dsh-plugin, dsh, plugin-updates), and enjoy.'
+Write-Host 'Next: open the repo, add topics (dsh-plugin, dsh, memory, plugin-hub), and enjoy.'
