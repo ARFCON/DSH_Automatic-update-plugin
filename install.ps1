@@ -5,11 +5,11 @@ param(
 $ErrorActionPreference = 'Stop'
 $Source = $PSScriptRoot
 $DshHome = if ($env:DSH_HOME) { $env:DSH_HOME } else { Join-Path $HOME '.dsh' }
-$Target = Join-Path $DshHome "plugin-src\dsh-plugin-updates"
+$Target = Join-Path $DshHome "plugin-src\dsh-hub"
 $ProfileDir = Join-Path $DshHome "profiles\$Profile"
 $PatchFile = Join-Path $ProfileDir 'cordis.patch.yml'
 
-Write-Host "== dsh-plugin-updates installer =="
+Write-Host "== dsh-hub installer =="
 Write-Host "Source : $Source"
 Write-Host "Target : $Target"
 Write-Host "Profile: $Profile"
@@ -65,14 +65,14 @@ try {
   if (-not (Test-Path $ProfileDir)) {
     New-Item -ItemType Directory -Path $ProfileDir -Force | Out-Null
   }
-  $row = "- insert:`n    - id: plugin-updates`n      name: 'dsh-plugin-updates'`n      config: {}`n"
+  $row = "- insert:`n    - id: dsh-hub`n      name: 'dsh-hub'`n      config: {}`n"
   $patchText = if (Test-Path $PatchFile) { Get-Content -Path $PatchFile -Raw } else { '' }
-  if ($patchText -match "name: 'dsh-plugin-updates'") {
-    Write-Host 'cordis.patch.yml already contains the dsh-plugin-updates row.'
+  if ($patchText -match "name: 'dsh-hub'") {
+    Write-Host 'cordis.patch.yml already contains the dsh-hub row.'
   } else {
     $utf8 = New-Object System.Text.UTF8Encoding($false)
     [System.IO.File]::AppendAllText($PatchFile, $row, $utf8)
-    Write-Host 'Added dsh-plugin-updates row to cordis.patch.yml.'
+    Write-Host 'Added dsh-hub row to cordis.patch.yml.'
   }
 } catch {
   Write-Warning "Install failed: $($_.Exception.Message)"
@@ -103,4 +103,4 @@ if ($backup) {
 
 Write-Host ''
 Write-Host 'Install done.'
-Write-Host 'Next: restart DSH service (DSH Desktop restart, or restart dsh web), then open Settings -> Plugins -> Plugin updates.'
+Write-Host 'Next: restart DSH service (DSH Desktop restart, or restart dsh web), then open Settings -> Plugins -> Plugin hub (插件中枢).'
