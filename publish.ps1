@@ -1,6 +1,6 @@
 param(
   [string]$Token = '',
-  [string]$RepoName = 'DSH_Automatic-update-plugin',
+  [string]$RepoName = 'dsh-hub-DSH',
   [string]$Description = 'dsh-hub: DSH plugin hub — global memory, graph-memory / dsh-market mount & status, self update check',
   [switch]$Private
 )
