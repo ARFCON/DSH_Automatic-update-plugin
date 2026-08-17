@@ -90,6 +90,12 @@ lib/
 
 ## 更新日志
 
+### 1.1.1（2026-08-17）
+
+- **修复「更新后版本停留」**：客户端配套插件（assets/plugins）无 GitHub 来源时，更新直接报错、永远到不了 npm 回退分支（如 billion-context-dsh 0.2.1→0.2.2 显示可更新却更新失败）；现在与 UI 的 updateable 判定一致，GitHub 源缺失时自动回退 npm registry 更新
+- **修复「检测不到自己的仓库」**：自身更新检查的 raw.githubusercontent.com 在国内不稳定（实测超时），新增 ghfast.top / gh-proxy.com 两个国内 raw 代理源，jsDelivr 降级为最终兜底（其缓存发布后可能短暂滞后）
+- 发布仓库更名为 `ARFCON/dsh-hub-DSH`（原 DSH_Automatic-update-plugin），自更新源、发布脚本默认仓库、README/PUBLISH 链接全部同步
+
 ### 1.1.0（2026-08-17）
 
 - 并入 dsh-plugin-updates 0.2.3 完整更新引擎：插件版本检查 / 单个与批量更新 / 启停 / 卸载 / 客户端配套插件更新 / Desktop 核心包检查 / 启动自检自动修复（repairAll）
