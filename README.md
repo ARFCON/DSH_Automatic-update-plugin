@@ -12,6 +12,7 @@
 | 🧠 全局记忆 | 原 dsh-memory 的 5 个 `memory_*` 工具（save / search / list / get / delete），所有会话共享，JSONL 存储（`~/.dsh/memory/memories.jsonl`），卸载旧 dsh-memory 后历史记忆原样保留 |
 | 🕸 graph-memory 挂载 | 检测到 `plugin-src/graph-memory` 源码即自动装配（写入 profile bundles + link + node_modules junction，幂等）；设置页展示安装状态与记忆库统计（节点 / 边 / 社区，直接只读 SQLite，不依赖 graph-memory 本体） |
 | 🛒 dsh-market 联动 | 检测插件市场（dshmarket）是否安装：已装 → 设置页状态展示，引导到「设置 → 插件市场」；未装 → 提醒并给出安装命令 |
+| 🧩 zat-dsh-engine 联动 | 检测 zat-dsh-engine（插件市场引擎，[mishibeikejie/zat-dsh-engine](https://github.com/mishibeikejie/zat-dsh-engine)）是否安装：已装 → 设置页状态展示，未装 → 提醒并给出安装命令 |
 | 🔄 自身更新检查 | 从 GitHub 仓库 `ARFCON/dsh-hub-DSH` 读取 `package.json` 版本号对比本地（raw.githubusercontent + jsDelivr CDN 双源，规避 GitHub API 限流 403） |
 
 > 设计原则：**只挂载、不修改**。dsh-hub 不改动 graph-memory 与 dsh-market 本体，只做检测、装配、状态展示与入口联动。
@@ -62,6 +63,7 @@ dsh plugin --profile web add "link:$HOME/.dsh/plugin-src/dsh-hub"
 - **全局记忆**：记忆条数、数据文件位置
 - **graph-memory**：源码版本、装配状态（未装配可一键「立即装配」，装配后需重启生效）、记忆库统计
 - **dsh-market**：安装状态；未安装时显示安装命令与仓库链接
+- **zat-dsh-engine**：插件市场引擎安装状态；未安装时显示安装命令与仓库链接，已安装时提示引擎就绪
 - **dsh-hub 自身更新**：当前版本、最新版本、检查时间；「检查更新」按钮手动触发
 
 ## 数据与兼容
@@ -89,6 +91,11 @@ lib/
 5. 不改动 graph-memory / dsh-market 本体，只做挂载与展示。
 
 ## 更新日志
+
+### 1.1.4（2026-08-17）
+
+- **内置 zat-dsh-engine 检测**：新增 zat-dsh-engine（插件市场引擎，`mishibeikejie/zat-dsh-engine`）状态检测，在「插件中枢」设置页显示安装状态、版本号与安装提示；未安装时提醒并给出安装命令与仓库链接，已安装时引导用户到插件市场
+- **zat-dsh-engine 加入 KNOWN_CLIENT_PLUGIN_REPOS**：内置 `mishibeikejie/zat-dsh-engine` 的 GitHub 仓库映射，避免客户端插件更新时因本地副本缺少 repository 字段而无法识别来源
 
 ### 1.1.3（2026-08-17）
 

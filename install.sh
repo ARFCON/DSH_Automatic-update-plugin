@@ -15,7 +15,12 @@ echo "Target : $TARGET"
 echo "Profile: $PROFILE"
 
 command -v pnpm >/dev/null 2>&1 || { echo 'pnpm not found on PATH. Install pnpm first: https://pnpm.io/installation' >&2; exit 1; }
-command -v dsh  >/dev/null 2>&1 || { echo 'dsh not found on PATH. Add the dsh CLI to PATH.' >&2; exit 1; }
+dsh_available=0
+command -v dsh >/dev/null 2>&1 && dsh_available=1
+if [ "$dsh_available" -eq 0 ]; then
+  echo 'dsh not found on PATH. Skipping profile registration. You can do this manually later:' >&2
+  echo "  dsh plugin --profile '$PROFILE' add 'link:$TARGET'" >&2
+fi
 
 # 1. 备份已存在的插件目录（保留副本，不做改名）
 backup=""
@@ -60,8 +65,13 @@ echo 'Installing dependencies with pnpm...'
 ( cd "$TARGET" && pnpm install --no-frozen-lockfile )
 
 # 5. 加入 profile（pnpm add link:... + bundle 校对）
-echo "Adding plugin to profile '$PROFILE'..."
-dsh plugin --profile "$PROFILE" add "link:$TARGET"
+if [ "$dsh_available" -eq 1 ]; then
+  echo "Adding plugin to profile '$PROFILE'..."
+  dsh plugin --profile "$PROFILE" add "link:$TARGET"
+else
+  echo "Skipping dsh plugin registration (dsh not on PATH). Manual step:"
+  echo "  dsh plugin --profile '$PROFILE' add 'link:$TARGET'"
+fi
 
 # 6. 确保激活行存在
 mkdir -p "$PROFILE_DIR"
@@ -83,4 +93,9 @@ fi
 
 echo ''
 echo 'Install done.'
+  if [ "$dsh_available" -eq 0 ]; then
+    echo "Note: dsh was not found on PATH. After adding dsh to PATH, run:"
+    echo "  dsh plugin --profile '$PROFILE' add 'link:$TARGET'"
+    echo "to register this plugin with the profile."
+  fi
 echo 'Next: restart DSH service, then open Settings -> Plugins -> Plugin hub (插件中枢).'
