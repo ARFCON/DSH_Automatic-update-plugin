@@ -90,6 +90,10 @@ lib/
 
 ## 更新日志
 
+### 1.1.3（2026-08-17）
+
+- 版本号升级至 1.1.3，准备 GitHub 发布
+
 ### 1.1.2（2026-08-17）
 
 - 发布仓库改名为 `ARFCON/dsh-hub-DSH` 后的配套同步收尾：`publish.ps1` 默认 `RepoName` 改为 `dsh-hub-DSH`（避免 PowerShell 5.1 跟随旧名 301 重定向丢 Authorization 头导致全部上传 401）；`PUBLISH.md` 新增「上传全部 401」排查条目
