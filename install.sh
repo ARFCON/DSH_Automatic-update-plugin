@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# dsh-plugin-updates installer（macOS / Linux；Windows 请用 install.ps1）
+# dsh-hub installer（macOS / Linux；Windows 请用 install.ps1）
 set -euo pipefail
 
 PROFILE="${1:-web}"
 SOURCE="$(cd "$(dirname "$0")" && pwd)"
 DSH_HOME="${DSH_HOME:-$HOME/.dsh}"
-TARGET="$DSH_HOME/plugin-src/dsh-plugin-updates"
+TARGET="$DSH_HOME/plugin-src/dsh-hub"
 PROFILE_DIR="$DSH_HOME/profiles/$PROFILE"
 PATCH_FILE="$PROFILE_DIR/cordis.patch.yml"
 
-echo "== dsh-plugin-updates installer =="
+echo "== dsh-hub installer =="
 echo "Source : $SOURCE"
 echo "Target : $TARGET"
 echo "Profile: $PROFILE"
@@ -65,11 +65,11 @@ dsh plugin --profile "$PROFILE" add "link:$TARGET"
 
 # 6. 确保激活行存在
 mkdir -p "$PROFILE_DIR"
-if [ -f "$PATCH_FILE" ] && grep -q "name: 'dsh-plugin-updates'" "$PATCH_FILE"; then
-  echo 'cordis.patch.yml already contains the dsh-plugin-updates row.'
+if [ -f "$PATCH_FILE" ] && grep -q "name: 'dsh-hub'" "$PATCH_FILE"; then
+  echo 'cordis.patch.yml already contains the dsh-hub row.'
 else
-  printf -- "- insert:\n    - id: plugin-updates\n      name: 'dsh-plugin-updates'\n      config: {}\n" >> "$PATCH_FILE"
-  echo 'Added dsh-plugin-updates row to cordis.patch.yml.'
+  printf -- "- insert:\n    - id: dsh-hub\n      name: 'dsh-hub'\n      config: {}\n" >> "$PATCH_FILE"
+  echo 'Added dsh-hub row to cordis.patch.yml.'
 fi
 
 trap - ERR
@@ -83,4 +83,4 @@ fi
 
 echo ''
 echo 'Install done.'
-echo 'Next: restart DSH service, then open Settings -> Plugins -> Plugin updates.'
+echo 'Next: restart DSH service, then open Settings -> Plugins -> Plugin hub (插件中枢).'
