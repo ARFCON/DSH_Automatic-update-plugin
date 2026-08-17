@@ -1,49 +1,34 @@
-# 发布说明（维护者专用）
+# 发布指南（给维护者）
 
-本文档说明如何把 dsh-plugin-updates 发布到 GitHub。普通使用者不需要阅读，也不需要 token。
+本目录是 dsh-hub 的完整发布套件。发布后 GitHub 仓库同时是**安装源**与**自身更新检查源**（`ARFCON/DSH_Automatic-update-plugin` 的 `package.json` version 会被 dsh-hub 用于对比本地版本）。
 
-## 准备 Token（最小权限）
+## 发布前检查
 
-1. 打开 GitHub → Settings → Developer settings → Fine-grained personal access tokens
-2. Generate new token，Repository access 选择：
-   - `Only select repositories` → 勾选目标仓库（例如 `DSH_Automatic-update-plugin`）
-3. Repository permissions 只开一项：
-   - **Contents: Read and write**（上传文件必需）
-4. 生成后复制
+1. **版本号同步**：`package.json` 的 `version` 必须与本次发布一致（dsh-hub 自更新检查读的就是它）。
+2. `lib/` 四个文件齐全：`index.js` / `client.js` / `typert.js` / `memory-core.js`。
+3. 改过 Remote 方法？检查三处同步（`lib/index.js` methods、`lib/typert.js` invocations、`lib/client.js` REMOTE.descriptors）。
+4. README.md 与 PUBLISH.md 里**不要出现本机路径**（如 `C:\Users\...`、`D:\y\...`），只写 `~/.dsh` 相对路径。
 
-> 安全提醒：
-> - 不要把 token 贴到聊天、工单、日志或公开文档里。
-> - 如果 token 曾出现在任何不安全的上下文（例如聊天记录），请立即到 token 页面 **Revoke**，并重新生成。
-> - 发布完成后如不再使用，也建议撤销。
-
-## 运行发布（推荐：安全交互输入）
-
-直接运行脚本，它会安全地提示你粘贴 token（输入内容不显示、不进 shell 历史）：
+## 发布
 
 ```powershell
-.\publish.ps1 -RepoName DSH_Automatic-update-plugin
-# 提示: GitHub token (will not be shown or saved to history)
-# 直接粘贴回车即可
+# 在插件目录（含 publish.ps1）里执行
+.\publish.ps1
 ```
 
-也可以先设环境变量（注意：`$env:GH_TOKEN = "..."` 这条命令本身会留在终端历史里，仅适合一次性使用且不介意历史记录）：
+- Token 优先级：`-Token` 参数 > `$env:GH_TOKEN` > `$env:GITHUB_TOKEN` > 交互式安全输入（不会写入历史）。
+- **推荐 fine-grained token，只授予本仓库 `Contents: Read and write`**。
+- 默认推送到 `ARFCON/DSH_Automatic-update-plugin` 的 `main` 分支（仓库已存在则只更新文件；不存在则自动创建）。
+- 上传文件列表见 `publish.ps1` 的 `$files`（README / LICENSE / PUBLISH / package.json / pnpm-lock.yaml / install 脚本 / publish 脚本 / lib 四个文件）。新增文件记得加进列表。
 
-```powershell
-$env:GH_TOKEN = "在这里粘贴你的 token"   # 仅当前 PowerShell 窗口生效
-.\publish.ps1 -RepoName DSH_Automatic-update-plugin
-```
+## 发布后验证
 
-脚本会：
-1. 自动获取令牌对应的 GitHub 用户名
-2. 仓库不存在时自动创建
-3. 用 REST API 上传 README、LICENSE、package.json、源码、安装/发布脚本
-4. 输出仓库地址
+1. 打开 `https://github.com/ARFCON/DSH_Automatic-update-plugin`，确认文件与本地一致。
+2. 本机：设置 → 插件 → 插件中枢 → 检查更新，应显示与 `package.json` 一致的版本。
+3. 其他机器：解压后运行 `install.ps1` / `install.sh` 验证全新安装。
 
-## 遇到 403 Forbidden
+## 常见问题
 
-如果上传返回 `Resource not accessible by personal access token`，说明 token 缺少写权限。请检查：
-- Repository access 是否勾选了目标仓库
-- Contents 是否为 **Read and write**
-- 是否点击了 Save changes
-
-不要反复重试同一个 token；确认权限已保存后再运行。
+- **HTTP 403**：GitHub API 限流或 token 权限不足。检查 token 是否只给了 Contents 权限且已认证；匿名 API 一小时 60 次，发布脚本用 token 不受此限。
+- **上传失败但文件已存在**：`contents` API 需要 `sha`，脚本会自动读取已有文件 sha；若仓库文件被外部改动导致冲突，手动删掉该文件重试。
+- **安装后设置页没有「插件中枢」Tab**：确认 `cordis.patch.yml` 里有 `- id: dsh-hub` / `name: 'dsh-hub'` 激活行，且已重启 DSH。
