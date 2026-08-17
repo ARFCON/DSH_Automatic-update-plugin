@@ -90,9 +90,19 @@ lib/
 
 ## 更新日志
 
+### 1.1.2（2026-08-17）
+
+- 发布仓库改名为 `ARFCON/dsh-hub-DSH` 后的配套同步收尾：`publish.ps1` 默认 `RepoName` 改为 `dsh-hub-DSH`（避免 PowerShell 5.1 跟随旧名 301 重定向丢 Authorization 头导致全部上传 401）；`PUBLISH.md` 新增「上传全部 401」排查条目
+- 版本号统一为 1.1.2：本地运行副本（`plugin-src`）与发布套件（`D:\y\a\dsh-hub`）12 个文件全部哈希一致，发布后自身更新检查显示「已是最新」
+- **新增「自身一键更新」**：设置页 dsh-hub 卡片检测到新版本时出现「更新到最新」按钮，一键从发布仓库 main 分支下载并覆盖本插件目录（保留 node_modules、带版本倒退保护与失败回滚），更新成功后本地版本号自动变为最新、立即显示「已是最新」，重启 DSH 后新代码生效
+
 ### 1.1.1（2026-08-17）
 
-- **修复「更新后版本停留」**：客户端配套插件（assets/plugins）无 GitHub 来源时，更新直接报错、永远到不了 npm 回退分支（如 billion-context-dsh 0.2.1→0.2.2 显示可更新却更新失败）；现在与 UI 的 updateable 判定一致，GitHub 源缺失时自动回退 npm registry 更新
+- **修复「更新后版本停留」**：三处根因全部修复并真实验证——
+  - 客户端配套插件（assets/plugins）无 GitHub 来源时更新直接报错、到不了 npm 回退分支（billion-context-dsh 0.2.1→0.2.2 实测更新成功）
+  - pnpm 11 的 `minimumReleaseAge` 供应链策略会静默抑制 `@latest` 对新发布包的解析（输出 "Already up to date" 版本停留）；改为先查 npm 最新版本、再用**显式版本** `pnpm add name@version`（dshmarket 1.8.0→1.11.0 实测更新成功），并增加「版本未变化即失败」断言
+  - GitHub 来源的本地插件更新：jsDelivr 版本列表去掉了 v 前缀（真实 tag 是 v2.0.0 时返回 2.0.0），下载用 `tags/2.0.0` 必 404；下载端自动尝试 原 tag / v+tag / 去 v（实测下载成功）
+- **修复「更新后插件崩溃/版本倒退」**：源码仓库 tag 与 package.json version 不一致时（如 graph-memory tag v2.0.0 包里 version=1.5.0），新增**版本倒退保护**（低于当前版本即回滚，实测拦截）与 **TS 源码入口强制构建**（main 指向 .ts 时不允许跳过 build，避免覆盖后 dist 产物丢失导致插件崩溃）
 - **修复「检测不到自己的仓库」**：自身更新检查的 raw.githubusercontent.com 在国内不稳定（实测超时），新增 ghfast.top / gh-proxy.com 两个国内 raw 代理源，jsDelivr 降级为最终兜底（其缓存发布后可能短暂滞后）
 - 发布仓库更名为 `ARFCON/dsh-hub-DSH`（原 DSH_Automatic-update-plugin），自更新源、发布脚本默认仓库、README/PUBLISH 链接全部同步
 
