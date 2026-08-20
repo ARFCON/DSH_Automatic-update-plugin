@@ -92,6 +92,13 @@ lib/
 
 ## 更新日志
 
+### 1.1.5（2026-08-20）
+
+- **修复自保激活行仍用旧名 dsh-plugin-updates**：启动自检的 ensureSelfActivation 现在补回的是 `dsh-hub` 自身的激活行（旧代码补 dsh-plugin-updates，导致 dsh-hub 激活行丢失时无法自愈）
+- **同族去重——加载两个 dsh-hub 时优先最新版与本地版**：profile 同时装配 `dsh-hub` 与 `dsh-hotplug-hub`（或两个来源的 dsh-hub）时，启动自检自动只保留一个 winner：本地版（link: 源）优先，同为本地/远端时版本号最高者胜出；loser 从 `dsh.profile.bundles` 与 `cordis.patch.yml` 激活行移除（不删依赖、不跑 pnpm，重启后只加载 winner）
+- **修复 install.ps1 尾部残留**：删除了引用未定义变量 `$dshAvailable` 的 Windows 安装脚本残留块
+- 版本号升级至 1.1.5，准备 GitHub 发布
+
 ### 1.1.4（2026-08-17）
 
 - **内置 zat-dsh-engine 检测**：新增 zat-dsh-engine（插件市场引擎，`mishibeikejie/zat-dsh-engine`）状态检测，在「插件中枢」设置页显示安装状态、版本号与安装提示；未安装时提醒并给出安装命令与仓库链接，已安装时引导用户到插件市场
