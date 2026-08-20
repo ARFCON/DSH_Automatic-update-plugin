@@ -1,6 +1,6 @@
 {
   "name": "dsh-hub",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "private": true,
   "description": "DSH 插件中枢：插件更新引擎（版本检查/一键更新/启停/卸载/启动自检修复）+ 全局记忆 + graph-memory / dsh-market 挂载 + 自身更新检查",
   "type": "module",
