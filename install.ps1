@@ -104,8 +104,3 @@ if ($backup) {
 Write-Host ''
 Write-Host 'Install done.'
 Write-Host 'Next: restart DSH service (DSH Desktop restart, or restart dsh web), then open Settings -> Plugins -> Plugin hub (插件中枢).'
-  if (-not $dshAvailable) {
-    Write-Host "Note: dsh was not found on PATH. After adding dsh to PATH, run:"
-    Write-Host "  dsh plugin --profile $Profile add 'link:$Target'"
-    Write-Host "to register this plugin with the profile."
-  }
