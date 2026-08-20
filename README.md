@@ -92,6 +92,9 @@ lib/
 
 ## 更新日志
 
+### 1.1.6（2026-08-20）
+- 设置页左侧边栏改为可上下滚动：插件中枢（dsh-hub）自动把 host 设置面板的 nav 列表打开纵向滚动，插件多时不再截断。
+
 ### 1.1.5（2026-08-20）
 
 - **修复自保激活行仍用旧名 dsh-plugin-updates**：启动自检的 ensureSelfActivation 现在补回的是 `dsh-hub` 自身的激活行（旧代码补 dsh-plugin-updates，导致 dsh-hub 激活行丢失时无法自愈）
