@@ -21,6 +21,10 @@
     "lib"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ARFCON/dsh-hub-DSH.git"
+  },
   "dsh": {
     "client": {
       "platform": "web",
