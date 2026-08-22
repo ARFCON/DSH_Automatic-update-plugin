@@ -1,15 +1,14 @@
 # dsh-hub — DSH 插件中枢
 
-把 DSH 的**插件更新引擎**、**全局记忆** 和**自身更新检查**整合进一个插件，在设置页统一查看与管理。
+把 DSH 的**插件更新引擎** 和**自身更新检查**整合进一个插件，在设置页统一查看与管理。
 
-替代旧插件 [dsh-plugin-updates]（更新检查器）与 **dsh-memory**（全局记忆）：二者功能全部并入 dsh-hub，记忆数据路径不变、不丢失。
+替代旧插件 [dsh-plugin-updates]（更新检查器）：其功能全部并入 dsh-hub。
 
 ## 功能
 
 | 模块 | 说明 |
 |---|---|
 | 🛠 插件更新引擎 | 原 dsh-plugin-updates 全部功能：已装插件版本对比（npm registry / GitHub release/tag）、一键更新、批量全部更新、启用/停用、卸载（含 bundle 与 patch 清理）、Desktop 客户端内置核心包检查、客户端配套插件（assets/plugins）更新、启动自检自动修复（损坏的 package.json / cordis.patch.yml 原子写恢复、插件入口缺失修复）。**原生适配 Gitee 版 DSH Desktop**（`my-yang-yunfan/dsh_desktop`）：客户端版本对比走 GitHub + Gitee 双源（与官方客户端同款端点与「取最高版本」语义，GitHub 限流时 Gitee 兜底），国内用户可直接打开 Gitee 发布页下载安装包 |
-| 🧠 全局记忆 | 原 dsh-memory 的 5 个 `memory_*` 工具（save / search / list / get / delete），所有会话共享，JSONL 存储（`~/.dsh/memory/memories.jsonl`），卸载旧 dsh-memory 后历史记忆原样保留 |
 | 🔄 自身更新检查 | 从 GitHub 仓库 `ARFCON/dsh-hub-DSH` 读取 `package.json` 版本号对比本地（raw.githubusercontent + jsDelivr CDN 双源，规避 GitHub API 限流 403） |
 
 ## 安装
@@ -55,22 +54,19 @@ dsh plugin --profile web add "link:$HOME/.dsh/plugin-src/dsh-hub"
 
 - **插件更新**：已安装插件列表（npm / GitHub / 本地源码 / Git 源 / 客户端插件 / Desktop 核心包），支持筛选、说明、启用/停用、单个更新、全部更新、卸载、GitHub 打开；顶部显示上次检查时间与启动自检修复结果；「立即重启服务」一键生效
 - **DSH Desktop 客户端版本**：在「插件更新」的客户端区块顶部显示官方最新版本（GitHub / Gitee 双源自动选择最高的可用版本）与当前版本对比；有新版本时给出「打开 Gitee 发布页 / 打开 GitHub 发布页」按钮，国内网络可直接跳转下载
-- **全局记忆**：记忆条数、数据文件位置
 - **dsh-hub 自身更新**：当前版本、最新版本、检查时间；「检查更新」按钮手动触发
 
 ## 数据与兼容
 
-- 记忆文件路径与旧 dsh-memory 完全一致：`~/.dsh/memory/memories.jsonl`（支持 `$DSH_HOME` 覆盖），**升级不丢数据**。
 - 若同时安装旧 dsh-plugin-updates 0.2.x，两者功能重叠，建议卸载旧插件（其功能已并入本插件）。
 
 ## 开发
 
 ```
 lib/
-  index.js       宿主端：更新引擎 + 记忆工具注册 + dshHub Remote 网关（9 个 Remote 方法）+ 客户端双源版本查询（queryClientRelease）
+  index.js       宿主端：更新引擎 + dshHub Remote 网关（9 个 Remote 方法）+ 客户端双源版本查询（queryClientRelease）
   client.js      客户端：设置页「插件中枢」Tab（中枢卡片 + 插件更新列表）
   typert.js      Typert Remote 定义（与 index.js 的 Remote 方法同步）
-  memory-core.js 记忆核心（JSONL 读写、搜索评分、mtime 缓存）
 ```
 
 维护铁律：
@@ -81,6 +77,9 @@ lib/
 4. `reconcileBundles` 只处理 dependencies 里读得到 package.json 的名字（不变量 #10，勿恢复 repairBundlesOrphans 逻辑）。
 
 ## 更新日志
+
+### 1.1.8（2026-08-22）
+- **移除全局记忆模块**：删除 `memory-core.js`（5 个 memory_* 工具）、`memoryTools` 注册、`status()` 里的 `memory` 字段、设置页「全局记忆」卡片与对应语言包，插件职责收窄为「更新引擎 + 自身更新检查」。
 
 ### 1.1.7（2026-08-22）
 - **移除 graph-memory / dsh-market / zat-dsh-engine 三个模块**：删除 graph-memory 检测/自动装配/记忆库统计、dsh-market 市场检测、zat-dsh-engine 引擎检测及其设置页三张状态卡片、`mountGraphMemory` Remote 方法与对应语言包，插件职责收窄为「更新引擎 + 全局记忆 + 自身更新检查」。
